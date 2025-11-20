@@ -1,0 +1,91 @@
+package edu.kh.todoList.model.dao;
+
+import java.io.FileInputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+
+import edu.kh.todoList.model.DTO.Todo;
+
+public class TodoListDAOImpl implements TodoListDAO{
+	
+	private Statement stmt;
+	private PreparedStatement pstmt;
+	private ResultSet rs;
+	private Properties prop;
+	
+	// TodoListDAOImpl 생성자 /xml/sql.xml 경로 읽어오기
+	public TodoListDAOImpl() {
+	// TodoListDAOImpl 객체가 생성 될 때( Service 단에서 new 연산자를 통해 객체화 될 때)
+	// sql.xml 파일의 내용을 읽어와 Properties prop 객체에 K:V 세팅
+		try {
+			String filePath = TodoListDAOImpl.class.getResource("/xml/sql.xml").getPath();
+			
+			prop = new Properties();
+			prop.loadFromXML(new FileInputStream(filePath));
+			
+		} catch (Exception e) {
+			System.out.println("sql.xml 로드 중 예외발생");
+			e.printStackTrace();
+		}
+		
+	}
+	
+	@Override
+	public List<Todo> todoListFullView(Connection conn) throws Exception{
+		List<Todo> todoList = new ArrayList();
+		
+		try {
+			String sql = prop.getProperty("todoListFullView");
+			
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			
+			while(rs.next()){
+				//builder 패턴 : 특정 값으로 초기화 된 객체를 쉽게 만드는 방법
+				// -> Lombok에서 제공하는 @Builder 어노테이션을 DTO에 작성하여 사용
+				Boolean complete = rs.getInt("TODO_COMPLETE")==1; 
+				Todo todo = Todo.builder()
+						.todoNo(rs.getInt("TODO_NO"))
+						.todoTitle(rs.getString("TODO_TITLE"))
+						.todoComplete(rs.getBoolean("TODO_COMPLETE"))
+						.regDate(rs.getString("REG_DATE"))
+						.build();
+				todoList.add(todo);
+			};
+			
+		} finally {
+			rs.close();
+			stmt.close();
+		}
+		
+		return todoList;
+	}
+
+	@Override
+	public int getCompeleteCount(Connection conn) throws Exception {
+		int completeCount = 0;
+		
+		try {
+			String sql = prop.getProperty("getCompleteCount");
+			
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			
+			if (rs.next()) {
+				completeCount = rs.getInt("CNT");
+			}
+			
+		} finally {
+			rs.close();
+			stmt.close();
+		}
+		
+		return completeCount;
+	}
+
+}
