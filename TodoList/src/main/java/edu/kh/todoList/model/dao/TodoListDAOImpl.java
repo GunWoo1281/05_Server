@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import static edu.kh.todoList.common.JDBCTemplate.*;
 import edu.kh.todoList.model.DTO.Todo;
 
 public class TodoListDAOImpl implements TodoListDAO{
@@ -81,11 +82,31 @@ public class TodoListDAOImpl implements TodoListDAO{
 			}
 			
 		} finally {
-			rs.close();
-			stmt.close();
+			close(rs);
+			close(stmt);
 		}
 		
 		return completeCount;
+	}
+
+	@Override
+	public int todoAdd(Connection conn, String title, String detail) throws Exception {
+		int result = 0;
+		
+		try {
+			String sql = prop.getProperty("todoAdd");
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, title);
+			pstmt.setString(2, detail);
+			
+			result = pstmt.executeUpdate();
+			
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
 	}
 
 }

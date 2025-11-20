@@ -72,6 +72,16 @@
 	</table>
 	
 	
-	
+	<c:if test="${!empty sessionScope.message}">
+		<script>
+			alert("${sessionScope.message}");
+			// JSP 해석순위
+			// 1순위 : JAVA(EL,JSTL)
+			// 2순위 : Front(HTML,CSS,JS)	
+		</script>
+
+		<!-- message를 한 번만 사용하고 제거하기 -->
+		<c:remove var="message" scope="session"/>
+	</c:if>
 </body>
 </html>

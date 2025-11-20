@@ -11,4 +11,6 @@ public interface TodoListDAO{
 
 	int getCompeleteCount(Connection conn) throws Exception;
 
+	int todoAdd(Connection conn, String title, String detail) throws Exception;
+
 }
