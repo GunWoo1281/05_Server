@@ -57,7 +57,7 @@
 						${todo.todoNo}
 					</th>
 					<td>
-						<a href="#">${todo.todoTitle}</a>
+						<a href="/todo/detail?todoNo=${todo.todoNo}">${todo.todoTitle}</a>
 					</td>
 					<td>
 						<c:if test="${todo.todoComplete}">O</c:if>
@@ -83,5 +83,6 @@
 		<!-- message를 한 번만 사용하고 제거하기 -->
 		<c:remove var="message" scope="session"/>
 	</c:if>
+	<script src="/resources/js/main.js"></script>
 </body>
 </html>

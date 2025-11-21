@@ -2,6 +2,8 @@ package edu.kh.todoList.model.service;
 
 import java.util.Map;
 
+import edu.kh.todoList.model.DTO.Todo;
+
 /*
 유지보수성, 확장성, 테스트용이성 때문에 인터페이스 구현함.
 Service / DAO 단은 interface와 상속받는 구현체 class로 작성한다.
@@ -13,6 +15,14 @@ public interface TodoListService {
 	Map<String, Object> todoListFullView() throws Exception;
 
 	int todoAdd(String title, String detail) throws Exception;
+
+	Todo todoDetail(int todoNo) throws Exception;
+
+	int todoComplete(int todoNo) throws Exception;
+
+	int deleteTodo(int todoNo) throws Exception;
+
+	int todoUpdate(int todoNo, String title, String detail) throws Exception;
 
 
 }

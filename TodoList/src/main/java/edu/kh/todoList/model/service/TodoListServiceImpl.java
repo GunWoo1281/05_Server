@@ -28,7 +28,8 @@ public class TodoListServiceImpl implements TodoListService {
 		Map<String, Object> map = new HashMap<>();
 		map.put("todoList", todoList);
 		map.put("completeCount", completeCount);
-		
+
+		close(conn);
 		return map;
 	}
 
@@ -41,6 +42,64 @@ public class TodoListServiceImpl implements TodoListService {
 		if (result > 0)
 			commit(conn);
 		else
+			rollback(conn);
+		
+		close(conn);
+		return result;
+	}
+
+	@Override
+	public Todo todoDetail(int todoNo) throws Exception {
+		
+		Connection conn = getConnection();
+		
+		Todo todo = dao.todoDetail(conn, todoNo);
+
+		close(conn);
+		return todo;
+	}
+
+	@Override
+	public int todoComplete(int todoNo) throws Exception {
+		
+		Connection conn = getConnection();
+		
+		int result = dao.todoComplete(conn, todoNo);
+		
+		if (result > 0)
+			commit(conn);
+		else
+			rollback(conn);
+		
+		close(conn);
+		return result;
+	}
+
+	@Override
+	public int deleteTodo(int todoNo) throws Exception {
+		
+		Connection conn = getConnection();
+		
+		int result = dao.deleteTodo(conn, todoNo);
+		
+		if (result > 0)
+			commit(conn);
+		else
+			rollback(conn);
+			
+		close(conn);
+		return result;
+	}
+
+	@Override
+	public int todoUpdate(int todoNo, String title, String detail) throws Exception {
+		Connection conn = getConnection();
+		
+		int result = dao.updateTodo(conn, todoNo, title, detail);
+		if (result > 0) {
+			commit(conn);
+		}
+		else 
 			rollback(conn);
 		
 		close(conn);

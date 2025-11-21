@@ -7,25 +7,25 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>수정 페이지</title>
+<title>${todo.todoTitle} 수정 페이지</title>
 </head>
 <body>
 
-	<h1></h1>
+	<h1>${todo.todoTitle}</h1>
 	
 	<h4>할 일 수정</h4>
 	
 	
 	<form action="/todo/update" method="post" id="updateForm">
 		<div>
-			제목 : <input type="text" name="title" value="">
+			제목 : <input type="text" name="title" value="${todo.todoTitle}">
 		</div>
 		<div>
-			<textarea name="detail" rows="3" cols="50" placeholder="상세 내용.."></textarea>
+			<textarea name="detail" rows="3" cols="50" placeholder="상세 내용..">${todo.todoDetail}</textarea>
 		</div>
 		
 		
-		<input type="hidden" name="todoNo" value="">
+		<input type="hidden" name="todoNo" value="${todo.todoNo}">
 		
 		<button>수정 완료</button>
 	</form>
